@@ -17,13 +17,13 @@ const cors = require('cors');
 app.use(cors());
 
 app.use(express.static(__dirname + '/public'));
-
+//mysql://bda4ba234ba416:265abcea@eu-cdbr-west-02.cleardb.net/heroku_9a9f65939f95cad?reconnect=true
 mysql.createConnection({
-	host:'localhost',
-	database:'cvd_shop',
-	user: 'root',
-	password: 'root',
-	port:8889
+	host:"eu-cdbr-west-02.cleardb.net",
+	user: "bda4ba234ba416",
+	password: "265abcea",
+	database:"heroku_9a9f65939f95cad"
+	
   
 	
 }).then((db) => {
@@ -36,7 +36,16 @@ mysql.createConnection({
 	    res.json({status: 200, msg: "Welcome to your annonces API bro!"})
 	})
 	
-	
+	app.get('/api/v1/cbd', async (req, res, next)=>{
+	    
+	    let adsBDD = await db.query('SELECT * FROM confiserie_kotlin_app');
+	    
+	    if(adsBDD.code){
+	        res.json({status:500, error_msg: adsBDD})
+	    }
+	    
+	    res.json({status: 200, results:{msg: "Success", cbd: adsBDD}})
+	})
 	
 
 
